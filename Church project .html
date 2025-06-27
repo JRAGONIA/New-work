@@ -27,7 +27,7 @@
         x.innerHTML = `Latitude: ${latitude} <br> Longitude: ${longitude}`;
 
         // Send to backend
-        fetch('http://YOUR_PHONE_IP:3000/your-endpoint', {
+        fetch('mongodb://username:password@localhost:27017/mydatabase', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
